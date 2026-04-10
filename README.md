@@ -155,3 +155,8 @@ For full rules and official specifications:
 | **Arduino Nano** | ATmega328-based microcontroller for control tasks. | <div align="center"><img width="500" height="300" alt="Arduino Nano" src="https://github.com/user-attachments/assets/22e8f59c-909d-4ff2-b637-dc03e15f4de6" /></div> | [Buy here](https://www.steren.com.mx/placa-de-desarrollo-nano.html) |
 | **Mini 560 Step-Down Regulator** | Converts a higher voltage power source to a lower voltage efficiently. | <div align="center"><img width="500" height="300" alt="Mini 560" src="https://github.com/user-attachments/assets/51c8abdf-98bc-41fd-a258-7c256c0dce49" /></div> | [Buy here](https://uelectronics.com/producto/mini-560-regulador-step-down/?srsltid=AfmBOooF0lIfgnTp_5_7mmjziZz1XquqOzfXZdxR7m-WYIGU82qSsVjV) |
 
+## Mobility Management
+
+### Chassis
+El chasis principal está impreso en 3D, para diseñarlo tuvimos que tener en cuenta muchas cosas, principalmente elegimos un modelo mas compacto y eficiente para que logre dar las vueltas sin chocar con los obstaculos y paredes, el modelo se diseño en onshape debido a sus amplias funciones.
+En la parte de las dirrecionales dejamos un espcio para que las llantas puedan girar libremente sin que el chasis y compenentes interferan, ademas se diseño una pieza extra en forma de triangulo para que el sevomotor se pueda encajar en las piezas de lego, asi obtuvimos que el servo este bien figado y el movimiento sea estable 
