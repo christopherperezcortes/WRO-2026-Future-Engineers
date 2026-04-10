@@ -34,7 +34,7 @@ An engineer and professor founded the **Los Grises Superiores** in 2014, since t
 </div>
 
 **Role:** Programming and Electronics 
-I started working at the **Robotics club** at the Escuela Normal Superior “Profr. Moisés Sáenz Garza” just a few months ago. I’m currently in my third year of middle school, and I’ve learned a lot about **electronics, programming, and 3D modeling**.
+I started working at the **Robotics Club** at the “Prof. Moisés Sáenz Garza” Teacher Training College just a few months ago. I took a crash course in robotics and was then selected to join the club. I’m currently in my third year of middle school and have learned a lot about **electronics, programming, and 3D modeling**. This is my first WRO tournament 
 
 ---
 
@@ -46,9 +46,7 @@ I started working at the **Robotics club** at the Escuela Normal Superior “Pro
 
 **Role:** design and assembly
 
-I have been part of the **Robotics Club** at *Escuela Normal Superior “Profr. Moisés Sáenz Garza”* for three years, participating in **two Mexican Robotics Tournaments**, achieving **5th place** in the most recent one. Starting in 2024, I became a **junior coach**, achieving **third place** in WRO 2024 and **first place nationally** in the Mexican Robotics Tournament 2025.
-
----
+I have been a member of the robotics club at the 'Profr. Moisés Sáenz Garza' Normal School for two months. I started after taking two intensive robotics courses, eventually joining this team for my first competition at WRO 2026.
 
 ### Paulina Ibarra Martínez
 **Age:** 20
@@ -110,3 +108,11 @@ For full rules and official specifications:
 🔗 [WRO 2025 Future Engineers – General Rules (PDF)](https://wro-association.org/wp-content/uploads/WRO-2025-Future-Engineers-Self-Driving-Cars-General-Rules.pdf)
 
 ---
+
+| Component | Description | Image | Purchase Link |
+|-----------|-------------|-------|----------------|
+| ** HuskyLens Cámara de Visión Artificial IA (SEN0305)** | This camera features built-in artificial intelligence and is designed to enable robots and electronic projects to see, recognize, and track objects easily without complex programming. | <div align="center"><img width="500" height="300" alt="OpenMV Cam H7 Plus" src="https://github.com/user-attachments/assets/2f1dc12c-a2f9-4e47-b665-d9b37091a8ce" /></div> | [Buy here](https://www.dfrobot.com/product-2995.html) |
+| **HC-SR04 Ultrasonic Sensor** | Distance measurement sensor. | <div align="center"><img width="500" height="300" alt="HC-SR04" src="https://github.com/user-attachments/assets/f55c9c1f-b8f7-4d51-9b24-01f51de329b8" /></div> | [Buy here](https://uelectronics.com/producto/sensor-ultrasonico-hc-sr04/) |
+| **Arduino Nano** | ATmega328-based microcontroller for control tasks. | <div align="center"><img width="500" height="300" alt="Arduino Nano" src="https://github.com/user-attachments/assets/22e8f59c-909d-4ff2-b637-dc03e15f4de6" /></div> | [Buy here](https://www.steren.com.mx/placa-de-desarrollo-nano.html) |
+| **Mini 560 Step-Down Regulator** | Converts a higher voltage power source to a lower voltage efficiently. | <div align="center"><img width="500" height="300" alt="Mini 560" src="https://github.com/user-attachments/assets/51c8abdf-98bc-41fd-a258-7c256c0dce49" /></div> | [Buy here](https://uelectronics.com/producto/mini-560-regulador-step-down/?srsltid=AfmBOooF0lIfgnTp_5_7mmjziZz1XquqOzfXZdxR7m-WYIGU82qSsVjV) |
+
