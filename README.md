@@ -109,6 +109,45 @@ For full rules and official specifications:
 
 ---
 
+## Vehicle Photos
+
+<div align="center">
+
+| Front | Back |
+|:--:|:--:|
+<img width="500" height="500" alt="image" src="" /> | <img width="500" height="500" alt="image" src="" /> |
+
+
+
+| Bottom | Top |
+|:--:|:--:|
+| <img width="500" height="500" alt="Top" src="" /> | <img width="500" height="500" alt="Bottom" src="" /> |
+
+| Left | Right |
+|:--:|:--:|
+| <img width="500" height="500" alt="Left" src="" /> | <img width="500" height="500" alt="Right" src="" /> |
+
+</div>
+
+---
+
+## 🎥 Project Videos
+
+<div align="center">
+
+### 🧩 Open Challenge  
+[![Watch the video](https://img.shields.io/badge/▶️%20Watch%20on-YouTube-red?logo=youtube&style=for-the-badge)](https://youtu.be/1m1DtpiEMQE)
+
+---
+
+### 🚧 Obstacle Challenge  
+[![Watch the video](https://img.shields.io/badge/▶️%20Watch%20on-YouTube-red?logo=youtube&style=for-the-badge)](https://youtu.be/9271onx2KII?si=sX-anvJybtzA0IHB)
+
+</div>
+
+---
+
+---
 | Component | Description | Image | Purchase Link |
 |-----------|-------------|-------|----------------|
 | ** HuskyLens Cámara de Visión Artificial IA (SEN0305)** | This camera features built-in artificial intelligence and is designed to enable robots and electronic projects to see, recognize, and track objects easily without complex programming. | <div align="center"><img width="500" height="300" alt="OpenMV Cam H7 Plus" src="https://github.com/christopherperezcortes/IMAGENES/blob/0ed4c77508b2cd74c5349e8b7ef828bcb97ae8f8/D_NQ_NP_819627-MLA99992057823_112025-O.webp" /></div> | [Buy here](https://www.dfrobot.com/product-2995.html) |
