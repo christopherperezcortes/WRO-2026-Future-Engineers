@@ -162,7 +162,41 @@ The main chassis is 3D-printed. When designing it, we had to take many factors i
 In the steering area, we left space so the wheels could turn freely without interference from the chassis or components. Additionally, we designed an extra triangular piece so the servo motor could fit into the LEGO pieces, ensuring the servo was securely fastened and the movement was stable. 
 
 <div align="center">
-<img width="1000" height="1000" alt="CHASIS" src="https://github.com/christopherperezcortes/IMAGENES/blob/f4b7efd2b9f949eae8dd6a845992508e85c39529/Captura%20de%20pantalla%202026-04-10%20122143.png" />
+<img width="500" height="500" alt="CHASIS" src="https://github.com/christopherperezcortes/IMAGENES/blob/f4b7efd2b9f949eae8dd6a845992508e85c39529/Captura%20de%20pantalla%202026-04-10%20122143.png" />
 </div>
 
-The parts were made using a 3D printer, but they were shipped in separate pieces
+
+The parts were manufactured using a 3D printer with PLA, a common material for 3D printing, but they were shipped separately
+
+
+<div align="center">
+<img width="500" height="5000" alt="foto de impresion" src="https://github.com/christopherperezcortes/IMAGENES/blob/f4b7efd2b9f949eae8dd6a845992508e85c39529/Captura%20de%20pantalla%202026-04-10%20122143.png" />
+</div>
+
+
+### Microcontroller(Arduino nano)
+<div align="center">
+<img width="500" height="500" alt="Arduino Nano large" src="https://github.com/user-attachments/assets/0d45ec5e-d666-4185-be01-94dc062a9f37" />
+</div>
+
+**Specifications:**
+
+| Specification            | Description |
+|---------------------------|-------------|
+| **Microcontroller**       | ATmega328P |
+| **Operating Voltage**     | 5 V |
+| **Input Voltage (recommended)** | 7–12 V |
+| **Input Voltage (limit)** | 6–20 V |
+| **Digital I/O Pins**      | 14 (6 PWM outputs) |
+| **Analog Input Pins**     | 8 |
+| **DC Current per I/O Pin** | 40 mA |
+| **Flash Memory**          | 32 KB (2 KB used by bootloader) |
+| **SRAM**                  | 2 KB |
+| **EEPROM**                | 1 KB |
+| **Clock Speed**           | 16 MHz |
+| **USB Connection**        | Mini USB |
+| **Dimensions**            | 45 mm x 18 mm |
+| **Weight**                | ~7 g |
+
+The Arduino Nano is a compact,microcontroller board based on the ATmega328P. Despite its small size, it offers full functionality with 14 digital I/O pins, 8 analog inputs, and a 16 MHz clock speed.
+It operates at 5V and can be powered through a Mini USB connection, a regulated 5V pin, or an external 7–12V input,
