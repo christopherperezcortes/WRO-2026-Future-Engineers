@@ -150,7 +150,7 @@ For full rules and official specifications:
 ---
 | Component | Description | Image | Purchase Link |
 |-----------|-------------|-------|----------------|
-| ** HuskyLens Cámara de Visión Artificial IA (SEN0305)** | This camera features built-in artificial intelligence and is designed to enable robots and electronic projects to see, recognize, and track objects easily without complex programming. | <div align="center"><img width="500" height="300" alt="OpenMV Cam H7 Plus" src="https://github.com/christopherperezcortes/IMAGENES/blob/0ed4c77508b2cd74c5349e8b7ef828bcb97ae8f8/D_NQ_NP_819627-MLA99992057823_112025-O.webp" /></div> | [Buy here](https://www.dfrobot.com/product-2995.html) |
+| ** HuskyLens Cámara de Visión Artificial IA (SEN0305)** | This camera features built-in artificial intelligence and is designed to enable robots and electronic projects to see, recognize, and track objects easily without complex programming. | <div align="center"><img width="500" height="300" alt="Huskylens" src="https://github.com/christopherperezcortes/IMAGENES/blob/0ed4c77508b2cd74c5349e8b7ef828bcb97ae8f8/D_NQ_NP_819627-MLA99992057823_112025-O.webp" /></div> | [Buy here](https://www.dfrobot.com/product-2995.html) |
 | **HC-SR04 Ultrasonic Sensor** | Distance measurement sensor. | <div align="center"><img width="500" height="300" alt="HC-SR04" src="https://github.com/user-attachments/assets/f55c9c1f-b8f7-4d51-9b24-01f51de329b8" /></div> | [Buy here](https://uelectronics.com/producto/sensor-ultrasonico-hc-sr04/) |
 | **Arduino Nano** | ATmega328-based microcontroller for control tasks. | <div align="center"><img width="500" height="300" alt="Arduino Nano" src="https://github.com/user-attachments/assets/22e8f59c-909d-4ff2-b637-dc03e15f4de6" /></div> | [Buy here](https://www.steren.com.mx/placa-de-desarrollo-nano.html) |
 | **Mini 560 Step-Down Regulator** | Converts a higher voltage power source to a lower voltage efficiently. | <div align="center"><img width="500" height="300" alt="Mini 560" src="https://github.com/user-attachments/assets/51c8abdf-98bc-41fd-a258-7c256c0dce49" /></div> | [Buy here](https://uelectronics.com/producto/mini-560-regulador-step-down/?srsltid=AfmBOooF0lIfgnTp_5_7mmjziZz1XquqOzfXZdxR7m-WYIGU82qSsVjV) |
@@ -158,5 +158,11 @@ For full rules and official specifications:
 ## Mobility Management
 
 ### Chassis
-El chasis principal está impreso en 3D, para diseñarlo tuvimos que tener en cuenta muchas cosas, principalmente elegimos un modelo mas compacto y eficiente para que logre dar las vueltas sin chocar con los obstaculos y paredes, el modelo se diseño en onshape debido a sus amplias funciones.
-En la parte de las dirrecionales dejamos un espcio para que las llantas puedan girar libremente sin que el chasis y compenentes interferan, ademas se diseño una pieza extra en forma de triangulo para que el sevomotor se pueda encajar en las piezas de lego, asi obtuvimos que el servo este bien figado y el movimiento sea estable 
+The main chassis is 3D-printed. When designing it, we had to take many factors into account; primarily, we chose a more compact and efficient model so it could navigate the course without colliding with obstacles or walls. The model was designed in Onshape due to its extensive features.
+In the steering area, we left space so the wheels could turn freely without interference from the chassis or components. Additionally, we designed an extra triangular piece so the servo motor could fit into the LEGO pieces, ensuring the servo was securely fastened and the movement was stable. 
+
+<div align="center">
+<img width="1000" height="1000" alt="CHASIS" src="https://github.com/christopherperezcortes/IMAGENES/blob/f4b7efd2b9f949eae8dd6a845992508e85c39529/Captura%20de%20pantalla%202026-04-10%20122143.png" />
+</div>
+
+The parts were made using a 3D printer, but they were shipped in separate pieces
