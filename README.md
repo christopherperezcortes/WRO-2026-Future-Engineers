@@ -150,7 +150,7 @@ For full rules and official specifications:
 ---
 | Component | Description | Image | Purchase Link |
 |-----------|-------------|-------|----------------|
-| ** HuskyLens Cámara de Visión Artificial IA (SEN0305)** | This camera features built-in artificial intelligence and is designed to enable robots and electronic projects to see, recognize, and track objects easily without complex programming. | <div align="center"><img width="500" height="300" alt="Huskylens" src="https://github.com/christopherperezcortes/IMAGENES/blob/0ed4c77508b2cd74c5349e8b7ef828bcb97ae8f8/D_NQ_NP_819627-MLA99992057823_112025-O.webp" /></div> | [Buy here](https://www.dfrobot.com/product-2995.html) |
+| ** HuskyLens AI Computer Vision Camera** | This camera features built-in artificial intelligence and is designed to enable robots and electronic projects to see, recognize, and track objects easily without complex programming. | <div align="center"><img width="500" height="300" alt="Huskylens" src="https://github.com/christopherperezcortes/IMAGENES/blob/0ed4c77508b2cd74c5349e8b7ef828bcb97ae8f8/D_NQ_NP_819627-MLA99992057823_112025-O.webp" /></div> | [Buy here](https://www.dfrobot.com/product-2995.html) |
 | **HC-SR04 Ultrasonic Sensor** | Distance measurement sensor. | <div align="center"><img width="500" height="300" alt="HC-SR04" src="https://github.com/user-attachments/assets/f55c9c1f-b8f7-4d51-9b24-01f51de329b8" /></div> | [Buy here](https://uelectronics.com/producto/sensor-ultrasonico-hc-sr04/) |
 | **Arduino Nano** | ATmega328-based microcontroller for control tasks. | <div align="center"><img width="500" height="300" alt="Arduino Nano" src="https://github.com/user-attachments/assets/22e8f59c-909d-4ff2-b637-dc03e15f4de6" /></div> | [Buy here](https://www.steren.com.mx/placa-de-desarrollo-nano.html) |
 | **Mini 560 Step-Down Regulator** | Converts a higher voltage power source to a lower voltage efficiently. | <div align="center"><img width="500" height="300" alt="Mini 560" src="https://github.com/user-attachments/assets/51c8abdf-98bc-41fd-a258-7c256c0dce49" /></div> | [Buy here](https://uelectronics.com/producto/mini-560-regulador-step-down/?srsltid=AfmBOooF0lIfgnTp_5_7mmjziZz1XquqOzfXZdxR7m-WYIGU82qSsVjV) |
@@ -200,3 +200,45 @@ The parts were manufactured using a 3D printer with PLA, a common material for 3
 
 The Arduino Nano is a compact,microcontroller board based on the ATmega328P. Despite its small size, it offers full functionality with 14 digital I/O pins, 8 analog inputs, and a 16 MHz clock speed.
 It operates at 5V and can be powered through a Mini USB connection, a regulated 5V pin, or an external 7–12V input,
+
+## HuskyLens AI Computer Vision Camera (SEN0305)
+<div align="center">
+<img width="600" height="600" alt="HuskyLens AI" src="https://github.com/christopherperezcortes/IMAGENES/blob/0ed4c77508b2cd74c5349e8b7ef828bcb97ae8f8/D_NQ_NP_819627-MLA99992057823_112025-O.webp" />
+</div
+
+
+
+## Specifications
+
+| Feature              | Details                                                                 |
+|----------------------|-------------------------------------------------------------------------|
+| Processor            | Kendryte K210, 400MHz, 64-Bit Dual Core RISC-V             |
+| Image Sensor         | Standard Version: OV2640, 2.0 Megapixel Camera Enhanced Version: OV5640, 5.0 Megapixel Camera                   |
+| Resolution           | 320 x 240 pixels                           |
+| Frame Rate           |  30 fps                               |
+| Image Formats        | OV2640                                  |
+| Connectivity         | UART (Serial) or I2C                                  |
+| Power Supply         | 3.3 V to 5.0 V.                           |
+| Onboard LEDs         | 2 white LEDs (fill lights) and 1 RGB LED                                 |
+| Programming Language | C++ and Python                                               |
+| Operating Voltage    | 3.3V a 5.0V DC                                                                    |
+| Dimensions           | 52mm * 44.5mm                                                    |
+| Weight               | 96g                                                       |
+
+HuskyLens is an AI-powered camera that’s very easy to use. It features a built-in display and a menu system for configuration, so you can start using it right away without any programming. It offers several operating modes:
+
+· Face recognition
+
+· Object recognition
+
+· Line tracking
+
+· Object trackin
+
+· Color recognition
+
+· QR code-based tag identification.
+
+It uses a Kendryte K210 AI processor and features I2C and UART connections to interact with Arduino, micro:bit, or Raspberry Pi without having to deal with the complexities of programming AI algorithms.
+
+ IMPORTANTE PONER:  The camera is mounted at a 70° angle on the highest point of the vehicle. This position was selected to maximize the field of view, allowing the vehicle to better detect obstacles and monitor the track, covering a larger area and facilitating the identification of the designated parking zone. Initially, the camera was positioned at the front of the vehicle, above the steering system. However, it faced visibility issues, as the field of view was limited, which led to errors when avoiding the pillars. 
