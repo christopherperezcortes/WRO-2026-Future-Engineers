@@ -244,3 +244,34 @@ HuskyLens is an AI-powered camera that’s very easy to use. It features a built
 It uses a Kendryte K210 AI processor and features I2C and UART connections to interact with Arduino, micro:bit, or Raspberry Pi without having to deal with the complexities of programming AI algorithms.
 
  IMPORTANTE PONER:  The camera is mounted at a 70° angle on the highest point of the vehicle. This position was selected to maximize the field of view, allowing the vehicle to better detect obstacles and monitor the track, covering a larger area and facilitating the identification of the designated parking zone. Initially, the camera was positioned at the front of the vehicle, above the steering system. However, it faced visibility issues, as the field of view was limited, which led to errors when avoiding the pillars. 
+
+ ## Mini 560 Regulador Step down 
+
+<div align="center">
+<img width="500" height="500" alt="Mini 560 module" src="https://github.com/user-attachments/assets/7566dcf4-fe6a-4349-af80-0a458462fb7a" />
+</div>
+
+**Specifications**
+
+| Specification | Description |
+|----------------|-------------|
+| **Model** | Mini 560 DC-DC Step-Down Converter |
+| **Input Voltage (Vin)** | 4.5V – 28V DC |
+| **Output Voltage (Vout)** | Adjustable from 0.8V – 20V DC |
+| **Default Output (pre-set)** | 5V (depending on module version) |
+| **Output Current (Iout)** | Up to 3A (recommended continuous current: 2A for stability) |
+| **Efficiency** | Up to 95% (depending on voltage and load) |
+| **Switching Frequency** | 1.5 MHz |
+| **Voltage Ripple** | < 30 mV (typical) |
+| **Load Regulation** | ±0.5% |
+| **Conversion Type** | Step-Down (Buck) Converter |
+| **Control IC** | MP2307 or similar synchronous rectifier chip |
+| **Operating Temperature** | -40°C to +85°C |
+| **Dimensions** | 22 mm x 17 mm x 4 mm |
+| **Protection Features** | Short-circuit, over-temperature, and over-current protection |
+| **Typical Applications** | Power supply for microcontrollers, sensors, cameras, LED strips, and communication modules |
+
+The Mini 560 Step-Down Regulator is used to efficiently convert higher input voltages to lower, stable output voltages suitable for powering microcontrollers, sensors, and other electronic modules in the robot. Its compact design and high efficiency make it ideal for embedded and portable applications.
+
+We use this module to regulate the voltage supplied to the two Arduino PCBs, stepping it down from 7V to 5V to ensure stable operation and optimal performance.
+
