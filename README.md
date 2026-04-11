@@ -273,5 +273,42 @@ It uses a Kendryte K210 AI processor and features I2C and UART connections to in
 
 The Mini 560 Step-Down Regulator is used to efficiently convert higher input voltages to lower, stable output voltages suitable for powering microcontrollers, sensors, and other electronic modules in the robot. Its compact design and high efficiency make it ideal for embedded and portable applications.
 
-We use this module to regulate the voltage supplied to the two Arduino PCBs, stepping it down from 7V to 5V to ensure stable operation and optimal performance.
+We use this module to regulate the voltage supplied to the two Arduino PCBs, stepping it down from 8.5V to 5V to ensure stable operation and optimal performance.
 
+## Ultrasonic HC-SR04
+
+<div align="center">
+<img width="1000" height="1000" alt="image" src="https://github.com/user-attachments/assets/da485b0f-8730-43e4-9475-f638a68670e4" />
+</div>
+
+
+### Specifications
+
+| **Parameter**             | **Description**                              |
+|----------------------------|----------------------------------------------|
+| **Operating Voltage**      | 5V DC                                        |
+| **Operating Current**      | 15 mA (typical)                              |
+| **Frequency**              | 40 kHz                                       |
+| **Max Range**              | 400 cm (4 m)                                 |
+| **Min Range**              | 2 cm                                         |
+| **Accuracy**               | ±3 mm                                        |
+| **Measuring Angle**        | < 15°                                        |
+| **Trigger Input Signal**   | 10 µs TTL pulse                              |
+| **Echo Output Signal**     | TTL signal, proportional to distance         |
+| **Dimensions**             | 45 mm x 20 mm x 15 mm                        |
+| **Working Temperature**    | -15°C to +70°C                               |
+
+The **HC-SR04** is an ultrasonic distance sensor that uses sonar to determine the distance to an object.  
+It provides accurate and stable readings and is commonly used in robotics for obstacle detection and distance measurement.
+
+### Pin Connections
+
+| **Pin** | **Label** | **Description**                          |
+|----------|------------|------------------------------------------|
+| 1        | VCC        | Power supply (+5V)                      |
+| 2        | Trig       | Trigger input to start measurement      |
+| 3        | Echo       | Output pulse proportional to distance   |
+| 4        | GND        | Ground connection (0V)                  |
+
+
+First, the front ultrasonic sensor measures a specific distance so that when it is about to hit a wall, it can decide what to do. The other two ultrasonic sensors are responsible for preventing collisions with the side walls; they are positioned on the sides at a 25° angle so they don’t get confused with the tires. When these sensors detect a wall, the robot will turn to get back on track and avoid a collision. These same sensors also help with turns: when a sensor doesn’t detect a wall, that’s where it should turn, and the process repeats.
