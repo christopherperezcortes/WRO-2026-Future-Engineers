@@ -41,7 +41,7 @@ I started working at the **Robotics Club** at the “Prof. Moisés Sáenz Garza�
 ### Bárbara Daiana García Balboa
 **Age:** 13
 <div align="center">
-  <img width="200" height="200" alt="Bárbara Daiana photo" src="h" />
+  <img width="200" height="200" alt="Bárbara Daiana photo" src="https://github.com/christopherperezcortes/IMAGENES/blob/6301f47842aa3b8c5a66a563d125029dfe55565e/WhatsApp%20Image%202026-04-18%20at%2010.03.53%20PM.jpeg" />
 </div>
 
 **Role:** design and assembly
