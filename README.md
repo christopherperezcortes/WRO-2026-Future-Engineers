@@ -350,3 +350,14 @@ The vehicle takes the curve without the tires dragging, resulting in a smoother,
   <p><em>Steering system render</em></p>
 </div>
 
+---
+
+### About Differential
+Distributes torque to wheels, enabling smooth cornering. Input via pinion and crown gears. Outer wheel rotates faster in turns, inner wheel slower, straight motion equal.
+
+A differential is a mechanical component that allows wheels on the same axle to rotate at different speeds while transmitting power from the motor. This is especially important when a vehicle turns, as the outer wheel needs to travel a greater distance than the inner wheel. The differential distributes torque between the wheels, ensuring smooth and efficient movement, reducing tire wear, and improving traction and stability. In our design, the differential receives motion from the transmission and transfers it to the tires, enabling precise control of the vehicle’s movement.
+
+<div align="center">
+  <img width="500" height="500" alt="Differential example" src="https://github.com/christopherperezcortes/WRO-2026-Future-Engineers/blob/6e9fc921020223be25b66e11d003dc450a727763/OTHERS/CAR%C2%B4S%20DIFFERENTIAL.png" />
+  <p><em>Image: Differential example</em></p>
+</div>
