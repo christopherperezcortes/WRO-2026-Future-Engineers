@@ -9,7 +9,7 @@ Official repository of Team Los Grises Superiores for the **Future Engineers –
 
 ## 📸 Team photo
 <div align="center">
-  <img width="300" height="500" alt="team-photo" src="https://github.com/christopherperezcortes/WRO-2026-Future-Engineers/blob/7e6883d057a914e7d2312305a107f0973d24a225/TEAM%20PHOTOS/Team%20photo.jpeg" />
+  <img width="300" height="200" alt="team-photo" src="https://github.com/christopherperezcortes/WRO-2026-Future-Engineers/blob/7e6883d057a914e7d2312305a107f0973d24a225/TEAM%20PHOTOS/Team%20photo.jpeg" />
 </div>
 
 ---
