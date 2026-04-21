@@ -334,3 +334,41 @@ First, the front ultrasonic sensor measures a specific distance so that when it 
 | **TOTAL** | — | — | — | — | — | — | **35** | **39.2** | — | **14.15** |
 
 ---
+### Steering System
+We use Ackermann steering to allow the front wheels to turn at different angles when cornering. This means that the wheel on the inside of the turn turns more than the outside wheel, since both follow different circular paths.
+
+It is primarily used to prevent the tires from sliding or dragging on the road surface when turning, which would occur if both wheels turned at the same angle. Thanks to this system, the vehicle can navigate curves more smoothly and precisely, improving control and stability.
+**Functionality:**
+
+- How It Works
+1. You turn the steering wheel
+When you turn the steering wheel, you send a signal to the steering system.
+
+2. The steering rack or mechanism moves
+The movement of the steering wheel is transmitted to the steering rack (or equivalent system), which pushes and pulls the steering rods.
+
+3. The steering links are activated
+The links (rods connecting the steering to the wheels) begin to move.
+
+4. The wheels turn at different angles
+Because of the way the links are positioned (slightly angled inward), the following happens:
+
+The inner wheel turns more.
+The outer wheel turns less.
+
+5. Each wheel follows its own path
+
+The inner wheel follows a smaller circle.
+The outer wheel follows a larger circle.
+
+6. Both wheels point to the same center of rotation
+Thanks to Ackermann geometry, both wheels are aligned toward the same imaginary point (the center of the curve).
+
+7. The car turns correctly
+The vehicle takes the curve without the tires dragging, resulting in a smoother, more stable, and more efficient turn.
+
+<div align="center">
+  <img width="700" height="700" alt="steering system" src="https://github.com/christopherperezcortes/WRO-2026-Future-Engineers/blob/ee9e0a592fb59821cf57f5a3888dfdb105ba2427/OTHERS/Ackerman%20steering.jpg" />
+  <p><em>Steering system render</em></p>
+</div>
+
