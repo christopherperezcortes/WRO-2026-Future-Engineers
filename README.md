@@ -361,8 +361,10 @@ A differential is a mechanical component that allows wheels on the same axle to 
   <img width="500" height="500" alt="Differential example" src="https://github.com/christopherperezcortes/WRO-2026-Future-Engineers/blob/6e9fc921020223be25b66e11d003dc450a727763/OTHERS/CAR%C2%B4S%20DIFFERENTIAL.png" />
   <p><em>Image: Differential example</em></p>
 </div>
+---
 
 **PCB**
+
 The PCB was designed in EasyEDA based on our requirements and sent for manufacturing through the JLCPCB website. Once the board arrived, we needed to solder the components onto it. 
 
 <img width="600" height="600" alt="image" src=" />
