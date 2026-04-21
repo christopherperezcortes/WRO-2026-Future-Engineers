@@ -990,6 +990,7 @@ And save the turn reference
 turnSmoothly();
 moveForward(speed);
 
+---
 
 **NO OBSTACLES**
 
