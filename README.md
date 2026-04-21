@@ -367,7 +367,7 @@ A differential is a mechanical component that allows wheels on the same axle to 
 
 The PCB was designed in EasyEDA based on our requirements and sent for manufacturing through the JLCPCB website. Once the board arrived, we needed to solder the components onto it. 
 
-<img width="600" height="600" alt="image" src=" />
+<img width="600" height="600" alt="image" src="" />
 
 **arduino's for the ultrasonic sensors design**
 
