@@ -382,7 +382,7 @@ To program the robot, we use the Arduino IDE because of its extensive libraries 
 
 We divided the code into two parts: one for the free-roaming round and another for the obstacle-avoidance round. This allows us to tailor the robot’s actions to the specific needs of each round.
 
-**OBSTACLES CODE**
+**OBSTACLES**
 
 /*
  * ============================================================
@@ -810,7 +810,8 @@ void loop() {
   delay(25);
 }
 
-🚗 WHAT DOES THIS CODE DO?
+
+### 🚗 WHAT DOES THIS CODE DO?
 
 It controls an autonomous robot that:
 
@@ -988,3 +989,429 @@ And save the turn reference
 🚗 FINAL PHASE: EXECUTE MOVEMENT
 turnSmoothly();
 moveForward(speed);
+
+
+**NO OBSTACLES**
+
+/*
+ * ============================================================
+ *   WRO FUTURE ENGINEERS — Vuelta Libre
+ *   Sensor IMU: MPU6050 (6 DOF — Giroscopio + Acelerómetro)
+ *   Parada:     Al acumular 1080° de giro (3 vueltas × 4 giros × 90°)
+ *   Cámara:     HuskyLens
+ *   Arduino:    Nano / Mega
+ * ============================================================
+ *
+ *  LIBRERÍAS NECESARIAS (instalar desde Arduino IDE):
+ *    - "HUSKYLENS"     by DFRobot
+ *    - "MPU6050_light" by rfetick
+ *    - "Wire"  (incluida en Arduino IDE)
+ *    - "Servo" (incluida en Arduino IDE)
+ *
+ *  CONEXIÓN MPU6050:
+ *    VCC → 3.3V (o 5V según módulo)
+ *    GND → GND
+ *    SDA → A4 (Nano) / 20 (Mega)
+ *    SCL → A5 (Nano) / 21 (Mega)
+ *
+ * ============================================================
+ */
+
+#include <Wire.h>
+#include "HUSKYLENS.h"
+#include <Servo.h>
+#include <MPU6050_light.h>
+
+// ============================================================
+//  OBJETOS
+// ============================================================
+HUSKYLENS huskylens;
+Servo     direccion;
+MPU6050   mpu(Wire);
+
+// ============================================================
+//  PINES — MOTOR
+// ============================================================
+#define IN1  5
+#define IN2  6
+#define ENA  3
+
+// ============================================================
+//  PINES — ULTRASÓNICOS
+// ============================================================
+#define TRIG_F  10
+#define ECHO_F  11
+#define TRIG_L  12
+#define ECHO_L  13
+#define TRIG_R  A0
+#define ECHO_R  A1
+
+// ============================================================
+//  SERVO — ÁNGULOS
+// ============================================================
+#define CENTRO    90
+#define IZQUIERDA 50
+#define DERECHA   130
+
+// ============================================================
+//  PARADA POR IMU — 3 vueltas × 4 giros × 90° = 1080°
+// ============================================================
+#define GRADOS_PARADA      1080.0   // Grados totales para detenerse
+#define UMBRAL_GIRO_90       70.0   // Mínimo de giro para confirmar un giro de 90°
+#define BLOQUEO_GIRO_MS      1500   // ms mínimos entre detecciones de giro
+
+float         yawAcumulado  = 0.0;  // Suma total de giros confirmados (°)
+float         yawRefGiro    = 0.0;  // Referencia por giro individual
+int           girosContados = 0;    // Cantidad de giros de 90° detectados
+unsigned long ultimoGiro    = 0;    // Timestamp del último giro confirmado
+bool          enGiro        = false;// True mientras ejecuta un giro de 90°
+
+// ============================================================
+//  VARIABLES — CONTROL GENERAL
+// ============================================================
+int           velocidad      = 140;
+bool          pasilloEstrecho = false;
+float         suavizado      = 0.0;
+
+bool          inicio         = true;
+int           faseInicio     = 0;
+
+bool          evitandoColor  = false;
+unsigned long tiempoColor    = 0;
+
+int           anguloActual   = CENTRO;
+int           anguloObjetivo = CENTRO;
+
+// ============================================================
+//  VARIABLES — PID LATERAL
+// ============================================================
+float Kp = 2.5;
+float Ki = 0.0;
+float Kd = 1.2;
+
+float error         = 0;
+float errorAnterior = 0;
+float integral      = 0;
+float derivada      = 0;
+float salidaPID     = 0;
+
+// ============================================================
+//  VARIABLES — GIROSCOPIO MPU6050
+// ============================================================
+float anguloYaw    = 0.0;
+float anguloYawRef = 0.0;
+
+#define UMBRAL_GIRO_CURVA      20.0
+#define UMBRAL_GIRO_EMERGENCIA 35.0
+
+// ============================================================
+//  FUNCIONES IMU
+// ============================================================
+void actualizarIMU() {
+  mpu.update();
+  anguloYaw = mpu.getAngleZ();
+}
+
+float giroRelativo() {
+  return anguloYaw - anguloYawRef;
+}
+
+void guardarReferenciaYaw() {
+  anguloYawRef = anguloYaw;
+}
+
+// ============================================================
+//  FUNCIÓN — CONTAR GIROS DE 90° Y ACUMULAR GRADOS
+// ============================================================
+void actualizarConteoGiros() {
+
+  // Detectar inicio de giro
+  if (!enGiro && abs(giroRelativo()) > 15.0) {
+    if (millis() - ultimoGiro > BLOQUEO_GIRO_MS) {
+      enGiro     = true;
+      yawRefGiro = anguloYaw;
+    }
+  }
+
+  // Confirmar giro de 90° completado
+  if (enGiro) {
+    float giroActual = abs(anguloYaw - yawRefGiro);
+
+    if (giroActual >= UMBRAL_GIRO_90) {
+      girosContados++;
+      yawAcumulado += 90.0;
+      ultimoGiro    = millis();
+      enGiro        = false;
+
+      guardarReferenciaYaw();
+
+      Serial.print(F("GIRO #"));
+      Serial.print(girosContados);
+      Serial.print(F("  |  Acumulado: "));
+      Serial.print(yawAcumulado);
+      Serial.println(F(" grados"));
+    }
+  }
+}
+
+// ============================================================
+//  FUNCIÓN — MEDIR DISTANCIA ULTRASÓNICO
+// ============================================================
+long medirDistancia(int trig, int echo) {
+  digitalWrite(trig, LOW);
+  delayMicroseconds(2);
+  digitalWrite(trig, HIGH);
+  delayMicroseconds(10);
+  digitalWrite(trig, LOW);
+
+  long duracion = pulseIn(echo, HIGH, 25000);
+  if (duracion == 0) return 100;
+  return duracion * 0.034 / 2;
+}
+
+// ============================================================
+//  FUNCIONES — MOTOR
+// ============================================================
+void avanzar(int vel) {
+  analogWrite(ENA, vel);
+  digitalWrite(IN1, HIGH);
+  digitalWrite(IN2, LOW);
+}
+
+void retroceder(int vel) {
+  analogWrite(ENA, vel);
+  digitalWrite(IN1, LOW);
+  digitalWrite(IN2, HIGH);
+}
+
+void detener() {
+  analogWrite(ENA, 0);
+  digitalWrite(IN1, LOW);
+  digitalWrite(IN2, LOW);
+}
+
+// ============================================================
+//  FUNCIÓN — GIRO SUAVE DEL SERVO
+// ============================================================
+void girarSuave() {
+  if      (anguloActual < anguloObjetivo) anguloActual++;
+  else if (anguloActual > anguloObjetivo) anguloActual--;
+  direccion.write(anguloActual);
+}
+
+// ============================================================
+//  SETUP
+// ============================================================
+void setup() {
+  Serial.begin(115200);
+
+  // Motor
+  pinMode(IN1, OUTPUT);
+  pinMode(IN2, OUTPUT);
+  pinMode(ENA, OUTPUT);
+
+  // Ultrasónicos
+  pinMode(TRIG_F, OUTPUT); pinMode(ECHO_F, INPUT);
+  pinMode(TRIG_L, OUTPUT); pinMode(ECHO_L, INPUT);
+  pinMode(TRIG_R, OUTPUT); pinMode(ECHO_R, INPUT);
+
+  // Servo
+  direccion.attach(9);
+  direccion.write(CENTRO);
+
+  // I2C
+  Wire.begin();
+
+  // ── MPU6050 ──────────────────────────────────────────────
+  byte status = mpu.begin();
+  while (status != 0) {
+    Serial.print(F("Error MPU6050 (codigo "));
+    Serial.print(status);
+    Serial.println(F("). Reintentando..."));
+    delay(500);
+    status = mpu.begin();
+  }
+  Serial.println(F("MPU6050 OK"));
+
+  Serial.println(F("Calibrando IMU... No mover el robot."));
+  mpu.calcOffsets(true, true);
+  anguloYaw    = 0.0;
+  anguloYawRef = 0.0;
+  yawAcumulado = 0.0;
+  Serial.println(F("Calibracion lista."));
+  // ─────────────────────────────────────────────────────────
+
+  // HuskyLens
+  while (!huskylens.begin(Wire)) {
+    Serial.println(F("Error HuskyLens. Reintentando..."));
+    delay(100);
+  }
+  Serial.println(F("HuskyLens OK"));
+
+  Serial.println(F("=== SISTEMA LISTO — WRO FUTURE ENGINEERS ==="));
+  Serial.print(F("Meta: "));
+  Serial.print(GRADOS_PARADA);
+  Serial.println(F(" grados acumulados (3 vueltas)"));
+}
+
+// ============================================================
+//  LOOP PRINCIPAL
+// ============================================================
+void loop() {
+
+  // — Actualizar IMU —
+  actualizarIMU();
+
+  // — Contar giros de 90° y acumular grados —
+  actualizarConteoGiros();
+
+  // — PARADA FINAL: 1080° acumulados = 3 vueltas completas —
+  if (yawAcumulado >= GRADOS_PARADA) {
+    detener();
+    anguloObjetivo = CENTRO;
+    girarSuave();
+    Serial.println(F("=== 3 VUELTAS COMPLETADAS. ROBOT DETENIDO. ==="));
+    Serial.print(F("Giros totales: "));
+    Serial.println(girosContados);
+    while (1);
+  }
+
+  // — Leer sensores —
+  long distF = medirDistancia(TRIG_F, ECHO_F);
+  long distL = medirDistancia(TRIG_L, ECHO_L);
+  long distR = medirDistancia(TRIG_R, ECHO_R);
+
+  // ── INICIO INTELIGENTE ───────────────────────────────────
+  if (inicio) {
+
+    // Fase 0: escape si hay pared frontal al arrancar
+    if (faseInicio == 0 && distF < 15) {
+      anguloObjetivo = (distR > distL) ? DERECHA : IZQUIERDA;
+      guardarReferenciaYaw();
+      girarSuave();
+      avanzar(100);
+      delay(250);
+      faseInicio = 1;
+      return;
+    }
+
+    // Fase 1: anti-esquina (maniobra S)
+    if (faseInicio == 1) {
+      if (distL < 10 && distR < 10) {
+        anguloObjetivo = DERECHA;   avanzar(100); delay(200);
+        anguloObjetivo = IZQUIERDA; avanzar(100); delay(200);
+      }
+      guardarReferenciaYaw();
+      faseInicio = 2;
+    }
+
+    // Fase 2: centrado fino con ultrasónicos
+    if (faseInicio == 2) {
+      int diferencia = distL - distR;
+      anguloObjetivo = constrain(CENTRO + (diferencia * 2), IZQUIERDA, DERECHA);
+      girarSuave();
+      if (abs(diferencia) < 3) {
+        inicio = false;
+        Serial.println(F("INICIO COMPLETADO"));
+      }
+      delay(30);
+      return;
+    }
+  }
+
+  // ── PASILLO ESTRECHO ─────────────────────────────────────
+  pasilloEstrecho = (distL < 15 && distR < 15);
+  if (pasilloEstrecho) velocidad = 110;
+
+  // ── VELOCIDAD ADAPTATIVA ─────────────────────────────────
+  if (!pasilloEstrecho) {
+    if      (distF < 18) velocidad = 110;
+    else if (distF < 30) velocidad = 130;
+    else                 velocidad = 150;
+  }
+
+  // ── PID LATERAL CON CORRECCIÓN IMU ───────────────────────
+  if (distF > 15) {
+
+    error = (float)(distL - distR);
+
+    suavizado = (suavizado * 0.7f) + (error * 0.3f);
+    error     = suavizado;
+
+    integral += error;
+    derivada  = error - errorAnterior;
+    salidaPID = (Kp * error) + (Ki * integral) + (Kd * derivada);
+    errorAnterior = error;
+
+    // Anticipación de curva
+    if (distL < 20 || distR < 20) salidaPID *= 1.3f;
+
+    // Corrección giroscópica (solo en tramos rectos, no durante giros)
+    if (!enGiro) {
+      float giro = giroRelativo();
+      if (abs(giro) > UMBRAL_GIRO_CURVA) {
+        salidaPID -= giro * 0.8f;
+        if (abs(giro) > UMBRAL_GIRO_EMERGENCIA) {
+          salidaPID = (giro > 0) ? -(float)(DERECHA - CENTRO)
+                                 :  (float)(DERECHA - CENTRO);
+        }
+      }
+    }
+
+    anguloObjetivo = constrain(CENTRO + (int)salidaPID, IZQUIERDA, DERECHA);
+  }
+
+  // ── EMERGENCIAS (pared muy cerca) ────────────────────────
+  if      (distL < 7) anguloObjetivo = DERECHA - 10;
+  else if (distR < 7) anguloObjetivo = IZQUIERDA + 10;
+  else if (distF < 15) {
+    anguloObjetivo = (distR > distL) ? DERECHA : IZQUIERDA;
+    evitandoColor  = false;
+    guardarReferenciaYaw();
+  }
+
+  // ── HUSKYLENS — DETECCIÓN DE COLORES ────────────────────
+  else {
+    if (!evitandoColor && huskylens.request()) {
+      if (huskylens.available()) {
+
+        int bloques   = huskylens.available();
+        int mejorID   = 0;
+        int mejorArea = 0;
+
+        for (int i = 0; i < bloques; i++) {
+          HUSKYLENSResult r = huskylens.read();
+          int area = r.width * r.height;
+          if (area > mejorArea) {
+            mejorArea = area;
+            mejorID   = r.ID;
+          }
+        }
+
+        if (mejorID == 1) {
+          anguloObjetivo = DERECHA;
+          evitandoColor  = true;
+          tiempoColor    = millis();
+          guardarReferenciaYaw();
+        }
+        if (mejorID == 2) {
+          anguloObjetivo = IZQUIERDA;
+          evitandoColor  = true;
+          tiempoColor    = millis();
+          guardarReferenciaYaw();
+        }
+      }
+    }
+
+    if (evitandoColor && millis() - tiempoColor > 300) {
+      evitandoColor = false;
+    }
+  }
+
+  // ── EJECUTAR MOVIMIENTO ───────────────────────────────────
+  girarSuave();
+  avanzar(velocidad);
+
+  delay(25);
+}
+
