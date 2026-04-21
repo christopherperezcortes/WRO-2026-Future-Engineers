@@ -372,3 +372,20 @@ The PCB was designed in EasyEDA based on our requirements and sent for manufactu
 **arduino's for the ultrasonic sensors design**
 
 <img width="600" height="600" alt="image" src="" />
+
+---
+
+---
+### CODE
+
+To program the robot, we use the Arduino IDE because of its extensive libraries and flexibility; the language this app uses is C++.
+
+We divided the code into two parts: one for the free-roaming round and another for the obstacle-avoidance round. This allows us to tailor the robot’s actions to the specific needs of each round.
+
+<img width="600" height="600" alt="image" src="" />
+
+<img width="600" height="600" alt="image" src="" />
+
+<img width="600" height="600" alt="image" src="" />
+
+<img width="600" height="600" alt="image" src="" />
