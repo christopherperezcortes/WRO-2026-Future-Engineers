@@ -363,7 +363,7 @@ A differential is a mechanical component that allows wheels on the same axle to 
 </div>
 ---
 
-**PCB**
+### PCB
 
 The PCB was designed in EasyEDA based on our requirements and sent for manufacturing through the JLCPCB website. Once the board arrived, we needed to solder the components onto it. 
 
