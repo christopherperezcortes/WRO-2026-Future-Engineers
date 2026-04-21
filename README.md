@@ -9,7 +9,7 @@ Official repository of Team Los Grises Superiores for the **Future Engineers –
 
 ## 📸 Team photo
 <div align="center">
-  <img width="300" height="200" alt="team-photo" src="https://github.com/christopherperezcortes/WRO-2026-Future-Engineers/blob/7e6883d057a914e7d2312305a107f0973d24a225/TEAM%20PHOTOS/Team%20photo.jpeg" />
+  <img width="500" height="500" alt="team-photo" src="https://github.com/christopherperezcortes/WRO-2026-Future-Engineers/blob/7e6883d057a914e7d2312305a107f0973d24a225/TEAM%20PHOTOS/Team%20photo.jpeg" />
 </div>
 
 ---
@@ -41,7 +41,7 @@ I started working at the **Robotics Club** at the “Prof. Moisés Sáenz Garza�
 ### Bárbara Daiana García Balboa
 **Age:** 13
 <div align="center">
-  <img width="200" height="200" alt="Bárbara Daiana photo" src="https://github.com/christopherperezcortes/IMAGENES/blob/6301f47842aa3b8c5a66a563d125029dfe55565e/WhatsApp%20Image%202026-04-18%20at%2010.03.53%20PM.jpeg" />
+  <img width="300" height="700" alt="Bárbara Daiana photo" src="https://github.com/christopherperezcortes/WRO-2026-Future-Engineers/blob/5598fd96e5c1175dc8433f93cdafd729e9609d09/TEAM%20PHOTOS/B%C3%A1rbara%20Daiana%20photo.jpeg" />
 </div>
 
 **Role:** design and assembly
