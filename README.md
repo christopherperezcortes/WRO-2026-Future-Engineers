@@ -30,7 +30,7 @@ An engineer and professor founded the **Los Grises Superiores** in 2014, since t
 ### Christopher Pérez cortés
 **Age:** 14
 <div align="center">
-  <img width="200" height="200" alt="Christopher Pérez photo" src="" />
+  <img width="200" height="200" alt="Christopher Pérez photo" src="https://github.com/christopherperezcortes/WRO-2026-Future-Engineers/blob/463589c5e9a747a83fb24a68542e14f249a2b56f/TEAM%20PHOTOS/Christopher%20P%C3%A9rez%20photo.jpeg" />
 </div>
 
 **Role:** Programming and Electronics 
