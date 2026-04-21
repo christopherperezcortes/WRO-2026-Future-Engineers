@@ -51,7 +51,7 @@ I have been a member of the robotics club at the 'Profr. Moisés Sáenz Garza' N
 ### Paulina Ibarra Martínez
 **Age:** 21
 <div align="center">
-  <img width="200" height="200" alt="Paulina Martinez photo" src="" />
+  <img width="200" height="200" alt="Paulina Martinez photo" src="https://github.com/user-attachments/assets/86413c8a-610a-4270-a92d-cb3ed135d41b" />
 </div>
 
 **Role:** design and construction
