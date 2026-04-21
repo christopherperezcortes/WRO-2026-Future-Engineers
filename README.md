@@ -49,7 +49,7 @@ I started working at the **Robotics Club** at the “Prof. Moisés Sáenz Garza�
 I have been a member of the robotics club at the 'Profr. Moisés Sáenz Garza' Normal School for two months. I started after taking two intensive robotics courses, eventually joining this team for my first competition at WRO 2026.
 
 ### Paulina Ibarra Martínez
-**Age:** 20
+**Age:** 21
 <div align="center">
   <img width="200" height="200" alt="Paulina Martinez photo" src="" />
 </div>
