@@ -382,10 +382,609 @@ To program the robot, we use the Arduino IDE because of its extensive libraries 
 
 We divided the code into two parts: one for the free-roaming round and another for the obstacle-avoidance round. This allows us to tailor the robot’s actions to the specific needs of each round.
 
-<img width="600" height="600" alt="image" src="" />
+**NO OBSTACLES CODE**
 
-<img width="600" height="600" alt="image" src="" />
+/*
+ * ============================================================
+ *   WRO FUTURE ENGINEERS — Robot Autónomo (Ronda Abierta)
+ *   Sensor IMU: MPU6050 (6 DOF)
+ *   Parada:     Al acumular 1080° de giro total (3 vueltas × 4 giros × 90°)
+ *   Cámara:     HuskyLens
+ *   Arduino:    Nano / Mega
+ * ============================================================
+ *
+ *  LIBRERÍAS NECESARIAS:
+ *    - "HUSKYLENS"    by DFRobot
+ *    - "MPU6050_light" by rfetick
+ *    - "Wire"  (incluida)
+ *    - "Servo" (incluida)
+ *
+ *  CONEXIÓN MPU6050:
+ *    VCC → 3.3V / 5V
+ *    GND → GND
+ *    SDA → A4 (Nano) / 20 (Mega)
+ *    SCL → A5 (Nano) / 21 (Mega)
+ *
+ * ============================================================
+ */
 
-<img width="600" height="600" alt="image" src="" />
+#include <Wire.h>
+#include "HUSKYLENS.h"
+#include <Servo.h>
+#include <MPU6050_light.h>
 
-<img width="600" height="600" alt="image" src="" />
+// ============================================================
+//  OBJETOS
+// ============================================================
+HUSKYLENS huskylens;
+Servo     direccion;
+MPU6050   mpu(Wire);
+
+// ============================================================
+//  PINES — MOTOR
+// ============================================================
+#define IN1  5
+#define IN2  6
+#define ENA  3
+
+// ============================================================
+//  PINES — ULTRASÓNICOS
+// ============================================================
+#define TRIG_F  10
+#define ECHO_F  11
+#define TRIG_L  12
+#define ECHO_L  13
+#define TRIG_R  A0
+#define ECHO_R  A1
+
+// ============================================================
+//  SERVO — ÁNGULOS
+// ============================================================
+#define CENTRO    90
+#define IZQUIERDA 50
+#define DERECHA   130
+
+// ============================================================
+//  PARADA POR IMU — 3 vueltas × 4 giros × 90° = 1080°
+// ============================================================
+#define GRADOS_PARADA     1080.0   // Grados totales acumulados para detenerse
+#define UMBRAL_GIRO_90     70.0   // A partir de este ángulo relativo se cuenta un giro de 90°
+#define BLOQUEO_GIRO_MS   1500    // ms mínimos entre detecciones de giro
+
+float         yawAcumulado   = 0.0;  // Suma absoluta de todos los giros
+float         yawAnterior    = 0.0;  // Yaw en el frame anterior
+int           girosContados  = 0;    // Giros de 90° detectados
+unsigned long ultimoGiro     = 0;    // Timestamp del último giro detectado
+float         yawRefGiro     = 0.0;  // Referencia para medir cada giro de 90°
+bool          enGiro         = false;// True mientras se está ejecutando un giro
+
+// ============================================================
+//  VARIABLES — CONTROL GENERAL
+// ============================================================
+int           velocidad      = 140;
+float         suavizado      = 0.0;
+bool          pasilloEstrecho = false;
+
+bool          inicio         = true;
+int           faseInicio     = 0;
+
+bool          evitandoColor  = false;
+unsigned long tiempoColor    = 0;
+
+int           anguloActual   = CENTRO;
+int           anguloObjetivo = CENTRO;
+
+// ============================================================
+//  VARIABLES — PID
+// ============================================================
+float Kp = 2.5;
+float Ki = 0.0;
+float Kd = 1.2;
+
+float error         = 0;
+float errorAnterior = 0;
+float integral      = 0;
+float derivada      = 0;
+float salidaPID     = 0;
+
+// ============================================================
+//  VARIABLES — IMU
+// ============================================================
+float anguloYaw    = 0.0;
+float anguloYawRef = 0.0;
+
+#define UMBRAL_GIRO_CURVA      20.0
+#define UMBRAL_GIRO_EMERGENCIA 35.0
+
+// ============================================================
+//  FUNCIONES IMU
+// ============================================================
+void actualizarIMU() {
+  mpu.update();
+  anguloYaw = mpu.getAngleZ();
+}
+
+float giroRelativo() {
+  return anguloYaw - anguloYawRef;
+}
+
+void guardarReferenciaYaw() {
+  anguloYawRef = anguloYaw;
+}
+
+// ============================================================
+//  FUNCIÓN — CONTAR GIROS DE 90° Y ACUMULAR GRADOS
+//
+//  Lógica:
+//    - Se guarda referencia al inicio de cada giro (enGiro = true)
+//    - Cuando el yaw relativo supera UMBRAL_GIRO_90, se cuenta 1 giro
+//    - Se acumulan 90° fijos por cada giro confirmado
+//    - Al llegar a GRADOS_PARADA (1080°) el robot se detiene
+// ============================================================
+void actualizarConteoGiros() {
+
+  // Detectar inicio de giro: el robot empieza a girar significativamente
+  if (!enGiro && abs(giroRelativo()) > 15.0) {
+    if (millis() - ultimoGiro > BLOQUEO_GIRO_MS) {
+      enGiro     = true;
+      yawRefGiro = anguloYaw;
+    }
+  }
+
+  // Confirmar giro de 90° completado
+  if (enGiro) {
+    float giroActual = abs(anguloYaw - yawRefGiro);
+
+    if (giroActual >= UMBRAL_GIRO_90) {
+      girosContados++;
+      yawAcumulado += 90.0;   // Sumamos 90° fijos (más estable que usar el valor raw)
+      ultimoGiro    = millis();
+      enGiro        = false;
+
+      guardarReferenciaYaw();  // Nueva referencia tras completar el giro
+
+      Serial.print(F("GIRO #"));
+      Serial.print(girosContados);
+      Serial.print(F("  |  Acumulado: "));
+      Serial.print(yawAcumulado);
+      Serial.println(F(" grados"));
+    }
+  }
+}
+
+// ============================================================
+//  FUNCIÓN — VERIFICAR SI SE ALCANZÓ LA META Y DETENER
+// ============================================================
+bool verificarParada() {
+  if (yawAcumulado >= GRADOS_PARADA) {
+    detener();   // Se declara abajo, forward declaration necesaria
+    direccion.write(CENTRO);
+    Serial.println(F("=== 3 VUELTAS COMPLETADAS. ROBOT DETENIDO. ==="));
+    Serial.print(F("Giros totales: "));
+    Serial.println(girosContados);
+    return true;
+  }
+  return false;
+}
+
+// ============================================================
+//  FUNCIÓN — MEDIR DISTANCIA ULTRASÓNICO
+// ============================================================
+long medirDistancia(int trig, int echo) {
+  digitalWrite(trig, LOW);
+  delayMicroseconds(2);
+  digitalWrite(trig, HIGH);
+  delayMicroseconds(10);
+  digitalWrite(trig, LOW);
+
+  long duracion = pulseIn(echo, HIGH, 25000);
+  if (duracion == 0) return 100;
+  return duracion * 0.034 / 2;
+}
+
+// ============================================================
+//  FUNCIONES — MOTOR
+// ============================================================
+void avanzar(int vel) {
+  analogWrite(ENA, vel);
+  digitalWrite(IN1, HIGH);
+  digitalWrite(IN2, LOW);
+}
+
+void detener() {
+  analogWrite(ENA, 0);
+  digitalWrite(IN1, LOW);
+  digitalWrite(IN2, LOW);
+}
+
+// ============================================================
+//  FUNCIÓN — GIRO SUAVE DEL SERVO
+// ============================================================
+void girarSuave() {
+  if      (anguloActual < anguloObjetivo) anguloActual++;
+  else if (anguloActual > anguloObjetivo) anguloActual--;
+  direccion.write(anguloActual);
+}
+
+// ============================================================
+//  SETUP
+// ============================================================
+void setup() {
+  Serial.begin(115200);
+
+  pinMode(IN1, OUTPUT);
+  pinMode(IN2, OUTPUT);
+  pinMode(ENA, OUTPUT);
+
+  pinMode(TRIG_F, OUTPUT); pinMode(ECHO_F, INPUT);
+  pinMode(TRIG_L, OUTPUT); pinMode(ECHO_L, INPUT);
+  pinMode(TRIG_R, OUTPUT); pinMode(ECHO_R, INPUT);
+
+  direccion.attach(9);
+  direccion.write(CENTRO);
+
+  Wire.begin();
+
+  // ── MPU6050 ──────────────────────────────────────────────
+  byte status = mpu.begin();
+  while (status != 0) {
+    Serial.print(F("Error MPU6050 (codigo "));
+    Serial.print(status);
+    Serial.println(F("). Reintentando..."));
+    delay(500);
+    status = mpu.begin();
+  }
+  Serial.println(F("MPU6050 OK"));
+  Serial.println(F("Calibrando IMU... No mover el robot."));
+  mpu.calcOffsets(true, true);
+  anguloYaw    = 0.0;
+  anguloYawRef = 0.0;
+  yawAcumulado = 0.0;
+  Serial.println(F("Calibracion lista."));
+  // ─────────────────────────────────────────────────────────
+
+  while (!huskylens.begin(Wire)) {
+    Serial.println(F("Error HuskyLens. Reintentando..."));
+    delay(100);
+  }
+  Serial.println(F("HuskyLens OK"));
+
+  Serial.println(F("=== SISTEMA LISTO — WRO FUTURE ENGINEERS ==="));
+  Serial.print(F("Meta: "));
+  Serial.print(GRADOS_PARADA);
+  Serial.println(F(" grados acumulados (3 vueltas)"));
+}
+
+// ============================================================
+//  LOOP PRINCIPAL
+// ============================================================
+void loop() {
+
+  // — Actualizar IMU —
+  actualizarIMU();
+
+  // — Contar giros de 90° y acumular grados —
+  actualizarConteoGiros();
+
+  // — Verificar si ya completó las 3 vueltas —
+  if (verificarParada()) {
+    while (1);   // Robot detenido permanentemente
+  }
+
+  // — Leer sensores —
+  long distF = medirDistancia(TRIG_F, ECHO_F);
+  long distL = medirDistancia(TRIG_L, ECHO_L);
+  long distR = medirDistancia(TRIG_R, ECHO_R);
+
+  // ── INICIO INTELIGENTE ───────────────────────────────────
+  if (inicio) {
+
+    if (faseInicio == 0 && distF < 15) {
+      anguloObjetivo = (distR > distL) ? DERECHA : IZQUIERDA;
+      guardarReferenciaYaw();
+      girarSuave();
+      avanzar(100);
+      delay(250);
+      faseInicio = 1;
+      return;
+    }
+
+    if (faseInicio == 1) {
+      if (distL < 10 && distR < 10) {
+        anguloObjetivo = DERECHA;  avanzar(100); delay(200);
+        anguloObjetivo = IZQUIERDA; avanzar(100); delay(200);
+      }
+      guardarReferenciaYaw();
+      faseInicio = 2;
+    }
+
+    if (faseInicio == 2) {
+      int diferencia = distL - distR;
+      anguloObjetivo = constrain(CENTRO + (diferencia * 2), IZQUIERDA, DERECHA);
+      girarSuave();
+      if (abs(diferencia) < 3) {
+        inicio = false;
+        Serial.println(F("INICIO COMPLETADO"));
+      }
+      delay(30);
+      return;
+    }
+  }
+
+  // ── PASILLO ESTRECHO ─────────────────────────────────────
+  pasilloEstrecho = (distL < 15 && distR < 15);
+  if (pasilloEstrecho) velocidad = 110;
+
+  // ── VELOCIDAD ADAPTATIVA ─────────────────────────────────
+  if (!pasilloEstrecho) {
+    if      (distF < 18) velocidad = 110;
+    else if (distF < 30) velocidad = 130;
+    else                 velocidad = 150;
+  }
+
+  // ── PID CON CORRECCIÓN IMU ───────────────────────────────
+  if (distF > 15) {
+
+    error = (float)(distL - distR);
+
+    suavizado = (suavizado * 0.7f) + (error * 0.3f);
+    error     = suavizado;
+
+    integral += error;
+    derivada  = error - errorAnterior;
+    salidaPID = (Kp * error) + (Ki * integral) + (Kd * derivada);
+    errorAnterior = error;
+
+    if (distL < 20 || distR < 20) salidaPID *= 1.3f;
+
+    // Corrección giroscópica (solo en tramos rectos, no durante giros)
+    if (!enGiro) {
+      float giro = giroRelativo();
+      if (abs(giro) > UMBRAL_GIRO_CURVA) {
+        salidaPID -= giro * 0.8f;
+        if (abs(giro) > UMBRAL_GIRO_EMERGENCIA) {
+          salidaPID = (giro > 0) ? -(float)(DERECHA - CENTRO)
+                                 :  (float)(DERECHA - CENTRO);
+        }
+      }
+    }
+
+    anguloObjetivo = constrain(CENTRO + (int)salidaPID, IZQUIERDA, DERECHA);
+  }
+
+  // ── EMERGENCIAS ──────────────────────────────────────────
+  if (distL < 7) {
+    anguloObjetivo = DERECHA - 10;
+  }
+  else if (distR < 7) {
+    anguloObjetivo = IZQUIERDA + 10;
+  }
+  else if (distF < 15) {
+    anguloObjetivo = (distR > distL) ? DERECHA : IZQUIERDA;
+    evitandoColor  = false;
+    guardarReferenciaYaw();
+  }
+
+  // ── HUSKYLENS ────────────────────────────────────────────
+  else {
+    if (!evitandoColor && huskylens.request()) {
+      if (huskylens.available()) {
+
+        int bloques   = huskylens.available();
+        int mejorID   = 0;
+        int mejorArea = 0;
+
+        for (int i = 0; i < bloques; i++) {
+          HUSKYLENSResult r = huskylens.read();
+          int area = r.width * r.height;
+          if (area > mejorArea) {
+            mejorArea = area;
+            mejorID   = r.ID;
+          }
+        }
+
+        if (mejorID == 1) {
+          anguloObjetivo = DERECHA;
+          evitandoColor  = true;
+          tiempoColor    = millis();
+          guardarReferenciaYaw();
+        }
+        if (mejorID == 2) {
+          anguloObjetivo = IZQUIERDA;
+          evitandoColor  = true;
+          tiempoColor    = millis();
+          guardarReferenciaYaw();
+        }
+      }
+    }
+
+    if (evitandoColor && millis() - tiempoColor > 300) {
+      evitandoColor = false;
+    }
+  }
+
+  // ── EJECUTAR MOVIMIENTO ───────────────────────────────────
+  girarSuave();
+  avanzar(velocidad);
+
+  delay(25);
+}
+
+🚗 WHAT DOES THIS CODE DO?
+
+It controls an autonomous robot that:
+
+Moves on its own
+Detects walls using ultrasonic sensors
+Uses a camera (HuskyLens) to see colors and objects
+Uses a gyroscope (MPU6050) to track how much it has turned
+Counts laps on the track
+Automatically corrects its course to avoid collisions
+
+👉 Basically: a smart car that navigates a circuit with obstacles
+
+🧠 HOW DOES IT WORK IN GENERAL?
+
+The robot uses 3 types of “eyes”:
+
+1. 📏 Ultrasonic sensors
+
+They measure distance:
+
+Front (distF)
+Left (distL)
+Right (distR)
+
+2. 👁️ HuskyLens camera
+
+Detects objects or colors:
+
+ID 1 → red → turn right
+ID 2 → green → turn left
+3. 🔄 MPU6050 gyroscope
+
+Measures how much the robot turns (Z-axis angle / yaw)
+
+⚙️ IMPORTANT PARTS OF THE CODE
+🔌 1. CONFIGURATION (PINS AND OBJECTS)
+
+The following are defined:
+
+Motor (IN1, IN2, ENA)
+Ultrasonic sensors
+Servo (direction)
+Turn sensor
+
+Objects are also created:
+
+HUSKYLENS huskylens;
+Servo direction;
+MPU6050 mpu(Wire);
+
+🔁 2. TURN COUNTER (INTERRUPT)
+
+void countTurn()
+Detects when the robot passes a point
+Prevents double counting (using timers)
+When a turn is detected:
+increases turns
+saves the current angle as a reference
+
+👉 This is used to know when to stop (3 turns)
+
+3. GYROSCOPE (IMU)
+
+Key functions:
+
+void updateIMU()
+float relativeRotation()
+void saveYawReference()
+updateIMU() → updates the angle
+relativeRotation() → how much it has rotated since the last point
+saveYawReference() → sets a new “zero point”
+
+👉 This helps maintain a stable heading
+
+📏 4. MEASURE DISTANCE
+long measureDistance(int trigger, int echo)
+Sends ultrasonic pulse
+Calculates distance
+If fails → returns 100 cm
+
+🚗 5. MOVEMENT
+moveForward(speed)
+stop()
+
+Motor control
+
+🔄 6. SMOOTH TURN
+void smoothTurn()
+
+Instead of turning abruptly:
+
+move the servo gradually
+👉 Makes the movement more stable
+
+🔧 7. SETUP (START)
+
+Does all of this:
+
+Configure pins
+Enable interrupt
+Initialize servo
+Initialize I2C
+Initialize MPU6050
+Calibrate gyroscope
+Initialize HuskyLens
+
+👉 Here the robot “wakes up”
+
+🔁 8. LOOP (ROBOT'S BRAIN)
+
+This is where EVERYTHING happens.
+
+🧠 PHASE 1: SMART START
+
+The robot decides where to go:
+
+If it detects a color:
+red → right
+green → left
+If not:
+uses ultrasonic sensors
+
+Then:
+
+centers itself
+avoids corners
+🏁 PHASE 2: STOP
+if (laps >= 3)
+It stops completely
+𑉫 End of race
+
+⚡ PHASE 3: ADAPTIVE SPEED
+if (distF < 18) speed = 110;
+If something is nearby → go slow
+If there is space → go fast
+
+🎯 PHASE 4: PID CONTROL (MOST IMPORTANT)
+PIDoutput = (Kp * error) + (Ki * integral) + (Kd * derivative);
+
+👉 This keeps the robot centered
+
+error = distL - distR
+If it’s closer to one side → corrects
+
+Also:
+
+smooths out movement
+anticipates turns
+
+🧭 PHASE 5: GYROSCOPE CORRECTION
+float rotation = relativeRotation();
+
+If the robot turns too much:
+
+automatically corrects the direction
+
+👉 This prevents it from losing control on turns
+
+🚨 PHASE 6: EMERGENCIES
+
+If it’s too close to something:
+
+left < 7 cm → turn right
+right < 7 cm → turn left
+front < 15 cm → decide which way to escape
+👁️ PHASE 7: CAMERA DETECTION
+
+If it sees objects:
+
+ID 1 → turn right
+ID 2 → turn left
+
+And save the turn reference
+
+🚗 FINAL PHASE: EXECUTE MOVEMENT
+turnSmoothly();
+moveForward(speed);
