@@ -382,7 +382,7 @@ To program the robot, we use the Arduino IDE because of its extensive libraries 
 
 We divided the code into two parts: one for the free-roaming round and another for the obstacle-avoidance round. This allows us to tailor the robot’s actions to the specific needs of each round.
 
-**NO OBSTACLES CODE**
+**OBSTACLES CODE**
 
 /*
  * ============================================================
