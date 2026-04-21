@@ -60,28 +60,6 @@ I have been part of the **Robotics Club** at *Escuela Normal Superior “Profr. 
 
 ---
 
-## 📚 Contents
-- [Project Overview](#project-overview)
-- [Vehicle Photos](#vehicle-photos)
-- [Components and Hardware](#components-and-hardware)
-- [Mobility Management](#mobility-management)
-  - [Chassis](#chassis)
-  - [Steering System](#steering-system)
-  - [Movement and Traction System](#movement-and-traction-system)
-  - [Differential](#about-differential)
-- [Power and Sense Management](#power-and-sense-management)
-  - [Power Management](#power-management)
-  - [Sense Management](#sense-management)
-- [Obstacle Management](#obstacle-management)
-  - [Vision System](#vision-system)
-- [Calibration](#calibration)
-- [Detection and Avoidance Strategies](#detection-and-avoidance-strategies)
-- [WRO 2025 Competition Info](#wro-2025-competition-info)
-
----
-
----
-
 ## Project Overview
 
 ### Abstract
